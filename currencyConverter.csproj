@@ -3,11 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Currency Converter</AssemblyName>
-    <RootNamespace>Currency Converter</RootNamespace>
+    <AssemblyName>CurrencyConverter</AssemblyName>
+    <RootNamespace>CurrencyConverter</RootNamespace>
     <ApplicationIcon>icon_main.ico</ApplicationIcon>
     <Authors>Dominik Zarsky</Authors>
     <PackageLicenseExpression>MIT License</PackageLicenseExpression>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
