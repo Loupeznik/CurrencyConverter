@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Xml.Schema;
 using Newtonsoft.Json.Linq;
 
 namespace currencyConverter
@@ -16,17 +17,23 @@ namespace currencyConverter
             Console.WriteLine("------------------");
             int currency = Options();
             Console.Write("Amount to convert: ");
-            int amount = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("------RESULT------");
-            Console.WriteLine(ConvertAmount(currency, amount));
-            Console.ReadKey();
-            
+            string amountText = Console.ReadLine();
+            if (double.TryParse(amountText, out _))
+            {
+                amountText = amountText.Replace('.', ',');
+                double amount = Convert.ToDouble(amountText);
+                Console.WriteLine("------RESULT------");
+                Console.WriteLine(ConvertAmount(currency, amount));
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("INVALID AMOUNT"); //add better logic for handling this
+            }
         }
 
         static int Options()
         {
-            Console.WriteLine("Currency Converter");
-            Console.WriteLine("------------------");
             Console.WriteLine("Select currency to convert");
             Console.WriteLine("1  | USD to CZK");
             Console.WriteLine("2  | CZK to USD");
@@ -43,10 +50,40 @@ namespace currencyConverter
             Console.WriteLine("------------------");
             Console.Write("Enter option number: ");
             string userInput = Console.ReadLine();
-            return Convert.ToInt32(userInput);
+            try
+            {
+                int output = Convert.ToInt32(userInput);
+                if (!checkOption(output))
+                {
+                    Console.WriteLine("------------------");
+                    Console.WriteLine(output.ToString() + " is not a valid option");
+                    Console.WriteLine("Try again");
+                    Console.WriteLine("------------------");
+                    Options();
+                }
+                return output;
+            } 
+            catch
+            {
+                Console.WriteLine("------------------");
+                Console.WriteLine("No value was entered");
+                Console.WriteLine("Try again");
+                Console.WriteLine("------------------");
+                return Options();
+            }
+            
         }
 
-        static string ConvertAmount(int currency, int amount)
+        static bool checkOption(int option)
+        {
+            if (option > 0 && option < 13)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        static string ConvertAmount(int currency, double amount)
         {
 
             string[,] conversionTable = { 
