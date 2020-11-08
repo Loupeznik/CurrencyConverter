@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Xml.Schema;
 using Newtonsoft.Json.Linq;
 
 namespace currencyConverter
@@ -18,9 +17,9 @@ namespace currencyConverter
             int currency = Options();
             Console.Write("Amount to convert: ");
             string amountText = Console.ReadLine();
+            amountText = amountText.Replace('.', ',');
             if (double.TryParse(amountText, out _))
             {
-                amountText = amountText.Replace('.', ',');
                 double amount = Convert.ToDouble(amountText);
                 Console.WriteLine("------RESULT------");
                 Console.WriteLine(ConvertAmount(currency, amount));
@@ -29,6 +28,7 @@ namespace currencyConverter
             else
             {
                 Console.WriteLine("INVALID AMOUNT"); //add better logic for handling this
+                Console.ReadKey();
             }
         }
 
