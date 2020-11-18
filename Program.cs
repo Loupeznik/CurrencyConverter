@@ -8,13 +8,39 @@ namespace currencyConverter
 {
     class Program
     {
+
+        static protected bool displayAnnotation = true;
+        static protected int queryNumber = 1;
+
         static void Main(string[] args)
         {
-            Console.WriteLine("WELCOME TO CURRENCY CONVERTER");
-            Console.WriteLine("EXCHANGE RATES COURTESY OF Exchange rates API (https://exchangeratesapi.io)");
-            Console.WriteLine("(C)2020 Dominik Zarsky, PROJECT IS MIT LICENSED");
-            Console.WriteLine("------------------");
+            if (displayAnnotation == true)
+            {
+                Console.WriteLine("WELCOME TO CURRENCY CONVERTER");
+                Console.WriteLine("EXCHANGE RATES COURTESY OF Exchange rates API (https://exchangeratesapi.io)");
+                Console.WriteLine("(C)2020 Dominik Zarsky, PROJECT IS MIT LICENSED");
+                Console.WriteLine("------------------");
+            }
             int currency = Options();
+            bool reset = ConvertAmount(currency);
+            if (reset)
+            {
+                displayAnnotation = false;
+                queryNumber += 1;
+                Console.WriteLine("------------------");
+                Console.WriteLine("-----QUERY #{0}-----", queryNumber);
+                Console.WriteLine("------------------");
+                Main(null);
+            } else
+            {
+                Console.WriteLine("------------------");
+                Console.WriteLine("PRESS ANY KEY TO EXIT");
+                Console.ReadKey();
+            }
+        }
+
+        static bool ConvertAmount(int currency)
+        {
             Console.Write("Amount to convert: ");
             string amountText = Console.ReadLine();
             amountText = amountText.Replace('.', ',');
@@ -23,12 +49,15 @@ namespace currencyConverter
                 double amount = Convert.ToDouble(amountText);
                 Console.WriteLine("------RESULT------");
                 Console.WriteLine(ConvertAmount(currency, amount));
-                Console.ReadKey();
+                Console.WriteLine("-----RESTART?-----");
+                Console.WriteLine("Y (Yes), N (No)");
+                string cmd = Console.ReadLine().ToLower();
+                if (cmd == "y" || cmd == "yes") return true; else return false;
             }
             else
             {
-                Console.WriteLine("INVALID AMOUNT"); //add better logic for handling this
-                Console.ReadKey();
+                Console.WriteLine("Entered amount is invalid");
+                return true;
             }
         }
 
@@ -59,7 +88,7 @@ namespace currencyConverter
                     Console.WriteLine(output.ToString() + " is not a valid option");
                     Console.WriteLine("Try again");
                     Console.WriteLine("------------------");
-                    Options();
+                    return Options();
                 }
                 return output;
             } 
@@ -71,7 +100,6 @@ namespace currencyConverter
                 Console.WriteLine("------------------");
                 return Options();
             }
-            
         }
 
         static bool checkOption(int option)
